@@ -5,12 +5,12 @@
 //define pin
 const int trigger = 5;
 const int echo = 18;
-const char* serveraddress = "192.168.0.30";
+const char* serveraddress = "192.168.43.34";
 const int serverport = 3000;
 
 //define wifi connection
-#define WIFINAME "Jimboi"
-#define PASSWORD "zakwanobey"
+#define WIFINAME "Walaoeh"
+#define PASSWORD "567894321"
 
 //define sound speed in cm/uS
 #define SOUND_SPEED 0.034
