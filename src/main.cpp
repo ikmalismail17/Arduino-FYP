@@ -5,7 +5,7 @@
 //define pin
 const int trigger = 5;
 const int echo = 18;
-const char* serveraddress = "192.168.0.30";
+const char* serveraddress = "192.168.0.11";
 const int serverport = 3000;
 
 //define wifi connection
