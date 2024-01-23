@@ -5,12 +5,15 @@
 //define pin
 const int trigger = 5;
 const int echo = 18;
-const char* serveraddress = "192.168.0.17";
-const int serverport = 3000;
+const char* serveraddress = "https://rivdepmonbackend.vercel.app";
+const int serverport = 443;
+
 
 //define wifi connection
-#define WIFINAME "Jimboi"
-#define PASSWORD "zakwanobey"
+// #define WIFINAME "Jimboi"
+// #define PASSWORD "zakwanobey"
+#define WIFINAME "Walaoeh"
+#define PASSWORD "567894321"
 
 //define sound speed in cm/uS
 #define SOUND_SPEED 0.034
@@ -79,6 +82,17 @@ void loop() {
     client.println("Content-Length: " + String(data.length()));
     client.println();
     client.println(data); // Your data
+
+    // Read and print HTTP response status code
+  while (client.connected()) {
+    String line = client.readStringUntil('\n');
+    if (line == "\r") {
+      break;
+    }
+  }
+  String statusLine = client.readStringUntil('\n');
+  Serial.println("HTTP Status Code: " + statusLine);
+  
     client.stop();
   }
 
