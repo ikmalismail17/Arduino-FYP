@@ -1,21 +1,18 @@
 #include <Arduino.h>
 #include <WiFi.h>
-#include <WiFiClient.h>
+#include <WiFiClientSecure.h>
 
-//define pin
+// Define pin
 const int trigger = 5;
 const int echo = 18;
-const char* serveraddress = "https://rivdepmonbackend.vercel.app";
+const char* serveraddress = "rivdepmonbackend.vercel.app";
 const int serverport = 443;
 
-
-//define wifi connection
-// #define WIFINAME "Jimboi"
-// #define PASSWORD "zakwanobey"
+// Define WiFi connection
 #define WIFINAME "Walaoeh"
 #define PASSWORD "567894321"
 
-//define sound speed in cm/uS
+// Define sound speed in cm/uS
 #define SOUND_SPEED 0.034
 #define CM_TO_INCH 0.393701
 
@@ -23,28 +20,24 @@ long duration;
 float distanceCm;
 float distanceInch;
 
-//funtion to connect to wifi
-void connectToWifi(){
-
-  //choosing the wifi mode
+// Function to connect to WiFi
+void connectToWifi() {
+  // Choosing the WiFi mode
   WiFi.mode(WIFI_STA);
 
-  //connecting wifi using the wifiname and password
+  // Connecting WiFi using the WiFi name and password
   WiFi.begin(WIFINAME, PASSWORD);
 
   Serial.println("\nConnecting");
 
-  while (WiFi.status() != WL_CONNECTED)
-  {
+  while (WiFi.status() != WL_CONNECTED) {
     Serial.println(".");
-    delayMicroseconds(1000);
-
+    delay(1000);
   }
 
-  Serial.println("Successfully connected to "+String(WIFINAME)+" Wifi");
-  Serial.print("Wifi IP is ");
+  Serial.println("Successfully connected to " + String(WIFINAME) + " WiFi");
+  Serial.print("WiFi IP is ");
   Serial.println(WiFi.localIP());
-  
 }
 
 void setup() {
@@ -63,8 +56,7 @@ void loop() {
 
   duration = pulseIn(echo, HIGH);
 
-  distanceCm = duration * SOUND_SPEED/2;
-  
+  distanceCm = duration * SOUND_SPEED / 2;
   distanceInch = distanceCm * CM_TO_INCH;
 
   Serial.print("Distance in cm: ");
@@ -72,9 +64,10 @@ void loop() {
   Serial.print("Distance in Inch: ");
   Serial.println(distanceInch);
 
-
   String data = "{\"distanceCm\": " + String(distanceCm) + ", \"distanceInch\": " + String(distanceInch) + "}";
-  WiFiClient client;
+  WiFiClientSecure client;
+
+  client.setInsecure();
   if (client.connect(serveraddress, serverport)) {
     client.println("POST /arduinodata HTTP/1.1");
     client.println("Host: " + String(serveraddress));
@@ -84,15 +77,16 @@ void loop() {
     client.println(data); // Your data
 
     // Read and print HTTP response status code
-  while (client.connected()) {
-    String line = client.readStringUntil('\n');
-    if (line == "\r") {
-      break;
+    while (client.connected()) {
+      String line = client.readStringUntil('\n');
+      if (line == "\r") {
+        break;
+      }
     }
-  }
-  String statusLine = client.readStringUntil('\n');
-  Serial.println("HTTP Status Code: " + statusLine);
-  
+
+    String statusLine = client.readStringUntil('\n');
+    Serial.println("HTTP Status Code: " + statusLine);
+
     client.stop();
   }
 
