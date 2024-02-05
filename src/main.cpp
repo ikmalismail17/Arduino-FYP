@@ -56,7 +56,7 @@ void loop() {
 
   duration = pulseIn(echo, HIGH);
 
-  distanceCm = duration * SOUND_SPEED / 2;
+  distanceCm = 29 - (duration * SOUND_SPEED / 2);
   distanceInch = distanceCm * CM_TO_INCH;
 
   Serial.print("Distance in cm: ");
@@ -90,5 +90,5 @@ void loop() {
     client.stop();
   }
 
-  delay(10000);
+  delay(2000);
 }
